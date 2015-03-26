@@ -320,8 +320,8 @@ void TFT_ILI9163C::chipInit() {
 	writedata16_cont(_GRAMHEIGH); 
 	// set scroll area (thanks Masuda)
     writecommand_cont(CMD_VSCLLDEF);
-    writedata16_cont(__OFFSET);
-    writedata16_cont(_GRAMHEIGH - __OFFSET);
+    writedata16_cont(__Y_OFFSET);
+    writedata16_cont(_GRAMHEIGH - __Y_OFFSET);
     writedata16_last(0);
 		
 	endProc();
@@ -393,8 +393,8 @@ void TFT_ILI9163C::chipInit() {
 	writedata16(_GRAMHEIGH);
 	// set scroll area (thanks Masuda)
     writecommand(CMD_VSCLLDEF);
-    writedata16(__OFFSET);
-    writedata16(_GRAMHEIGH - __OFFSET);
+    writedata16(__Y_OFFSET);
+    writedata16(_GRAMHEIGH - __Y_OFFSET);
     writedata16(0);
 	colorSpace(_colorspaceData);
 	setRotation(0);
@@ -497,7 +497,7 @@ void TFT_ILI9163C::sleepMode(boolean mode) {
 }
 
 void TFT_ILI9163C::defineScrollArea(uint16_t tfa, uint16_t bfa){
-    tfa += __OFFSET;
+    tfa += __Y_OFFSET;
     int16_t vsa = _GRAMHEIGH - tfa - bfa;
     if (vsa >= 0) {
 		#if defined(__MK20DX128__) || defined(__MK20DX256__)
@@ -521,11 +521,11 @@ void TFT_ILI9163C::scroll(uint16_t adrs) {
 	#if defined(__MK20DX128__) || defined(__MK20DX256__)
 		SPI.beginTransaction(SPISettings(SPICLOCK, MSBFIRST, SPI_MODE0));
 		writecommand_cont(CMD_VSSTADRS);
-		writedata16_last(adrs + __OFFSET);
+		writedata16_last(adrs + __Y_OFFSET);
 		endProc();
 	#else
 		writecommand(CMD_VSSTADRS);
-		writedata16(adrs + __OFFSET);
+		writedata16(adrs + __Y_OFFSET);
 	#endif
 	}
 }
@@ -827,20 +827,20 @@ void TFT_ILI9163C::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t
 	#else
 		writecommand(CMD_CLMADRS); // Column
 		if (rotation == 0 || rotation > 1){
-			writedata16(x0);
-			writedata16(x1);
+			writedata16(x0 + __X_OFFSET);
+			writedata16(x1 + __X_OFFSET);
 		} else {
-			writedata16(x0 + __OFFSET);
-			writedata16(x1 + __OFFSET);
+			writedata16(x0 + __Y_OFFSET);
+			writedata16(x1 + __Y_OFFSET);
 		}
 
 		writecommand(CMD_PGEADRS); // Page
 		if (rotation == 0){
-			writedata16(y0 + __OFFSET);
-			writedata16(y1 + __OFFSET);
+			writedata16(y0 + __Y_OFFSET);
+			writedata16(y1 + __Y_OFFSET);
 		} else {
-			writedata16(y0);
-			writedata16(y1);
+			writedata16(y0 + __X_OFFSET);
+			writedata16(y1 + __X_OFFSET);
 		}
 		writecommand(CMD_RAMWR); //Into RAM
 	#endif
@@ -850,19 +850,19 @@ void TFT_ILI9163C::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t
 void TFT_ILI9163C::_setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 	writecommand_cont(CMD_CLMADRS); // Column
 	if (rotation == 0 || rotation > 1){
-		writedata16_cont(x0);
-		writedata16_cont(x1);
+		writedata16_cont(x0 + __X_OFFSET);
+		writedata16_cont(x1 + __X_OFFSET);
 	} else {
-		writedata16_cont(x0 + __OFFSET);
-		writedata16_cont(x1 + __OFFSET);
+		writedata16_cont(x0 + __Y_OFFSET);
+		writedata16_cont(x1 + __Y_OFFSET);
 	}
 	writecommand_cont(CMD_PGEADRS); // Page
 	if (rotation == 0){
-		writedata16_cont(y0 + __OFFSET);
-		writedata16_cont(y1 + __OFFSET);
+		writedata16_cont(y0 + __Y_OFFSET);
+		writedata16_cont(y1 + __Y_OFFSET);
 	} else {
-		writedata16_cont(y0);
-		writedata16_cont(y1);
+		writedata16_cont(y0 + __X_OFFSET);
+		writedata16_cont(y1 + __X_OFFSET);
 	}
 	writecommand_cont(CMD_RAMWR); //Into RAM
 }
@@ -874,22 +874,22 @@ void TFT_ILI9163C::setRotation(uint8_t m) {
 	case 0:
 		_Mactrl_Data = 0b00001000;
 		_width  = _TFTWIDTH;
-		_height = _TFTHEIGHT;//-__OFFSET;
+		_height = _TFTHEIGHT;//-__Y_OFFSET;
 		break;
 	case 1:
 		_Mactrl_Data = 0b01101000;
-		_width  = _TFTHEIGHT;//-__OFFSET;
+		_width  = _TFTHEIGHT;//-__Y_OFFSET;
 		_height = _TFTWIDTH;
 		break;
 	case 2:
 		_Mactrl_Data = 0b11001000;
 		_width  = _TFTWIDTH;
-		_height = _TFTHEIGHT;//-__OFFSET;
+		_height = _TFTHEIGHT;//-__Y_OFFSET;
 		break;
 	case 3:
 		_Mactrl_Data = 0b10101000;
 		_width  = _TFTWIDTH;
-		_height = _TFTHEIGHT;//-__OFFSET;
+		_height = _TFTHEIGHT;//-__Y_OFFSET;
 		break;
 	}
 	colorSpace(_colorspaceData);

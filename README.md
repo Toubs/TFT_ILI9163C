@@ -61,6 +61,8 @@ http://www.ebay.com/itm/Replace-Nokia-5110-LCD-1-44-Red-Serial-128X128-SPI-Color
 
 http://www.elecrow.com/144-128x-128-tft-lcd-with-spi-interface-p-855.html
 	
+http://www.ebay.de/itm/1-2-3-5x-1-44-Inch-Seriel-Farbe-SPI-TFT-LCD-Modul-Display-Anzeige-fur-Arduino-/321667244041 - This is the second display with a red PCB.
+
 	This TFT it's really cheap but has surprising features since it support very high speed SPI trasfer 
 	(over 40Mhz tested!) and can be used as frame buffer, colors are quite tunable and has a tons of settings.
 	It also support repetitive serial transfer so it can react very fast.
@@ -69,6 +71,7 @@ http://www.elecrow.com/144-128x-128-tft-lcd-with-spi-interface-p-855.html
 	
 	There's different strain of this display on ebay, I have try to tracking all of them but may missing some 		species! Actually the more popular has a RED pcb and a BLACK pcb that are completely same pcb but mount a 		different display that need some tweaking, in particular RED ones need offset but also some tweak for 			colors, etc. In the .h file in the library try to comment out one of the presets:
 	//#define __144_RED_PCB__
+	//#define __144_RED_PCB_2__ // Another display with a red PCB
 	#define __144_BLACK_PCB__
 	//#define __22_RED_PCB__
 	I have a discussion here where a couple of users claim that the _GRAMHEIGH propriety should be always 128.
@@ -83,7 +86,8 @@ http://www.elecrow.com/144-128x-128-tft-lcd-with-spi-interface-p-855.html
 	#define _GRAMSIZE		_GRAMWIDTH * _GRAMHEIGH //
 	#define __COLORSPC		1// 1:GBR - 0:RGB
 	#define __GAMMASET3		//uncomment for another gamma (1,2,3)
-	#define __OFFSET		32//this is the offset of my display, 160 - 128 = 32
+	#define __X_OFFSET		0
+	#define __Y_OFFSET		32//this is the offset of my display, 160 - 128 = 32
 	
 	You can write your own one by adding it in the .h file but let me know so I can add for other users.
 	The OFFSET have sense if the chinese vendor decided to align TFT at bottom lines of the controller.
@@ -181,6 +185,7 @@ https://github.com/riuson/lcd-image-converter
 	0.7:   Gold release candidate. Fixed initialization (thanks Masuda)
 	0.75:  SPI transactions for Arduino's (beta) please report if troubles (not tested)
 	0.8:   Added compatibility with IDE 1.6.x (Teensyduino 1.21b)
+	0.8b1: Added __X_OFFSET and a preset for another display with a red PCB (http://www.ebay.de/itm/1-2-3-5x-1-44-Inch-Seriel-Farbe-SPI-TFT-LCD-Modul-Display-Anzeige-fur-Arduino-/321667244041)
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 <b> Legal Notes:</b>
